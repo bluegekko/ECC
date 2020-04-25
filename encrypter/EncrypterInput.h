@@ -2,7 +2,7 @@
 #define PROGRAMINPUT_H_INCLUDED
 
 #include <vector>
-#include "InputSerializer.h"
+#include "../common/InputSerializer.h"
 
 const size_t INPUT_NUMBER = 6;
 

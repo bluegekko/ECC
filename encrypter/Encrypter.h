@@ -1,8 +1,8 @@
 #ifndef ENCRYPTER_H_INCLUDED
 #define ENCRYPTER_H_INCLUDED
 
-#include "PrimeField.h"
-#include "EllipticCurve.h"
+#include "../common/PrimeField.h"
+#include "../common/EllipticCurve.h"
 #include "EncrypterInput.h"
 
 void runEncrypter(int argc, char** argv)
