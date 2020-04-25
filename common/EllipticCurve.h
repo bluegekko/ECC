@@ -17,6 +17,7 @@ public:
     EllipticCurvePoint multiply(const EllipticCurvePoint& point, uint64_t m) const;
     PrimeFieldValue getA() const {return A;}
     PrimeFieldValue getB() const {return B;}
+
 private:
     std::shared_ptr<PrimeFieldValueFactory> primeFieldValueFactory;
     PrimeFieldValue A;

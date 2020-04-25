@@ -3,11 +3,14 @@
 #include "encrypter/Encrypter.h"
 #endif // build_encrypter
 
+#include "series/SeriesGenerator.h"
+
 
 int main(int argc, char** argv)
 {
     #ifdef build_encrypter
-    runEncrypter(argc, argv);
+    encrypter::runEncrypter(argc, argv);
     #endif // build_encrypter
+    series::runSeriesGenerator(argc, argv);
     return 0;
 }

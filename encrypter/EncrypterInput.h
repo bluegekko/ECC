@@ -4,6 +4,9 @@
 #include <vector>
 #include "../common/InputSerializer.h"
 
+namespace encrypter
+{
+
 const size_t INPUT_NUMBER = 6;
 
 struct EncrypterParameters
@@ -34,5 +37,6 @@ EncrypterParameters readInput(const std::string fileName)
 
 }
 
+} // namespace encypter
 
 #endif // PROGRAMINPUT_H_INCLUDED
