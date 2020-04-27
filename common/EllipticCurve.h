@@ -13,7 +13,9 @@ public:
     EllipticCurve(PrimeFieldValue A, PrimeFieldValue B, std::shared_ptr<PrimeFieldValueFactory> primeFieldValueFactory)
         :primeFieldValueFactory(primeFieldValueFactory), A(A), B(B), zero(primeFieldValueFactory->newValue(0)), idealPoint(zero, zero) {}
     EllipticCurvePoint doublePoint(const EllipticCurvePoint& point) const;
+    EllipticCurvePoint inverse(const EllipticCurvePoint& point) const;
     EllipticCurvePoint add(const EllipticCurvePoint& pointFirst, const EllipticCurvePoint& pointSecond) const;
+    EllipticCurvePoint subtract(const EllipticCurvePoint& pointFirst, const EllipticCurvePoint& pointSecond) const;
     EllipticCurvePoint multiply(const EllipticCurvePoint& point, uint64_t m) const;
     PrimeFieldValue getA() const {return A;}
     PrimeFieldValue getB() const {return B;}
@@ -36,6 +38,13 @@ EllipticCurvePoint EllipticCurve::doublePoint(const EllipticCurvePoint& point) c
     PrimeFieldValue x = lambda*lambda - point.first*2;
     PrimeFieldValue y = lambda*(point.first - x) - point.second;
     return EllipticCurvePoint(x,y);
+}
+
+EllipticCurvePoint EllipticCurve::inverse(const EllipticCurvePoint& point) const
+{
+    EllipticCurvePoint returnValue = point;
+    returnValue.second = zero - returnValue.second;
+    return returnValue;
 }
 
 EllipticCurvePoint EllipticCurve::add(const EllipticCurvePoint& pointP, const EllipticCurvePoint& pointQ) const
@@ -64,6 +73,11 @@ EllipticCurvePoint EllipticCurve::add(const EllipticCurvePoint& pointP, const El
     PrimeFieldValue x = lambda*lambda - pointP.first - pointQ.first;
     PrimeFieldValue y = lambda*(pointP.first - x) - pointP.second;
     return EllipticCurvePoint(x,y);
+}
+
+EllipticCurvePoint EllipticCurve::subtract(const EllipticCurvePoint& pointP, const EllipticCurvePoint& pointQ) const
+{
+    return add(pointP, inverse(pointQ));
 }
 
 EllipticCurvePoint EllipticCurve::multiply(const EllipticCurvePoint& point, uint64_t m) const
