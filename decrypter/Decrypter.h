@@ -30,8 +30,11 @@ void runDecrypter(int argc, char** argv)
     auto forwardListIterator = forwardList.end();
     auto backwardListIterator = backwardList.end();
 
+    //EllipticCurvePoint temp = curve.add(base, base);
+    //temp = curve.add(base, temp);
+
     uint64_t m = 1;
-    for (; m<decrypterParameters.prime; ++m)
+    for (; m<decrypterParameters.prime*decrypterParameters.prime; ++m)
     {
         runningValue = curve.add(runningValue, base);
         EllipticCurvePoint reverseValue = curve.subtract(key,runningValue);
@@ -43,19 +46,14 @@ void runDecrypter(int argc, char** argv)
         {
             break;
         }
+
     }
-    uint64_t a = 0;
-    if (forwardListIterator != forwardList.end())
-    {
-        a = m + forwardListIterator->second;
-    }
-    else
-    {
-        a = m + backwardListIterator->second;
-    }
+    uint64_t a = forwardListIterator != forwardList.end() ? m + forwardListIterator->second : m + backwardListIterator->second;
 
 
     std::cout << a << std::endl;
+    std::cout << (key.first.getValue()) << " " << (key.second.getValue()) << std::endl;
+    std::cout << curve.multiply(base, a).first.getValue() << " " << curve.multiply(base,a).second.getValue() << std::endl;
    /* std::ofstream outStream(outputFileName);
     outStream << "#prime: " <<  encrypterParameters.prime << std::endl;
     outStream << "#point-in-ECC-field-g: " << encrypterParameters.g.first.getValue() << " " << encrypterParameters.g.second.getValue() << std::endl;

@@ -14,6 +14,7 @@
 
 int main(int argc, char** argv)
 {
+
     #ifdef build_encrypter
     //encrypter::runEncrypter(argc, argv);
     #endif // build_encrypter

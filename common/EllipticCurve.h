@@ -9,7 +9,14 @@ typedef std::pair<PrimeFieldValue,PrimeFieldValue> EllipticCurvePoint;
 
 bool operator<(const EllipticCurvePoint& lvalue, const EllipticCurvePoint& rvalue)
 {
-    return lvalue.first < rvalue.first;
+    if (lvalue.first != rvalue.first)
+    {
+        return lvalue.first < rvalue.first;
+    }
+    else
+    {
+        return lvalue.second < rvalue.second;
+    }
 }
 
 class EllipticCurve
@@ -70,7 +77,7 @@ EllipticCurvePoint EllipticCurve::add(const EllipticCurvePoint& pointP, const El
         return doublePoint(pointP);
     }
 
-    if (pointP.second == pointQ.second)
+    if (pointP.first == pointQ.first)
     {
         return EllipticCurvePoint(zero, zero);
     }
