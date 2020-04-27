@@ -17,6 +17,7 @@ public:
     PrimeFieldValue pow(uint64_t other) const;
 
     bool operator==(const PrimeFieldValue& other) const;
+    bool operator<(const PrimeFieldValue& other) const;
 
     uint64_t getValue() {return value;}
 private:

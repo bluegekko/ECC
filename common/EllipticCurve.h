@@ -7,11 +7,17 @@
 // 0,0 is the ideal point O
 typedef std::pair<PrimeFieldValue,PrimeFieldValue> EllipticCurvePoint;
 
+bool operator<(const EllipticCurvePoint& lvalue, const EllipticCurvePoint& rvalue)
+{
+    return lvalue.first < rvalue.first;
+}
+
 class EllipticCurve
 {
 public:
     EllipticCurve(PrimeFieldValue A, PrimeFieldValue B, std::shared_ptr<PrimeFieldValueFactory> primeFieldValueFactory)
         :primeFieldValueFactory(primeFieldValueFactory), A(A), B(B), zero(primeFieldValueFactory->newValue(0)), idealPoint(zero, zero) {}
+    EllipticCurvePoint getIdealPoint() const {return idealPoint;}
     EllipticCurvePoint doublePoint(const EllipticCurvePoint& point) const;
     EllipticCurvePoint inverse(const EllipticCurvePoint& point) const;
     EllipticCurvePoint add(const EllipticCurvePoint& pointFirst, const EllipticCurvePoint& pointSecond) const;

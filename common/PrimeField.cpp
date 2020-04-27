@@ -53,3 +53,8 @@ bool PrimeFieldValue::operator==(const PrimeFieldValue& other) const
 {
     return value == other.value;
 }
+
+bool PrimeFieldValue::operator<(const PrimeFieldValue& other) const
+{
+    return value < other.value;
+}
