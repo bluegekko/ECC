@@ -8,8 +8,6 @@
 namespace series
 {
 
-const size_t INPUT_NUMBER = 5;
-
 struct SeriesParameters
 {
     SeriesParameters(uint64_t prime, uint64_t pointX, uint64_t pointY, uint64_t curveA, uint64_t curveB) :
@@ -24,15 +22,12 @@ struct SeriesParameters
 SeriesParameters readInput(const std::string& fileName)
 {
     InputSerializer inputSerializer(fileName);
-    inputSerializer.initialize();
-    std::vector<uint64_t> inputs;
-    inputs.resize(INPUT_NUMBER);
-    for(size_t i = 0; i<INPUT_NUMBER; ++i)
-    {
-        inputs[i] = inputSerializer.getNextNumber();
-    }
-
-    return SeriesParameters(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4]);
+    inputSerializer.initializeMap();
+    uint64_t prime = inputSerializer.getNumberForKey("#prime");
+    std::pair<uint64_t,uint64_t> pointCoordinates = inputSerializer.getNumberPairForKey("#point-in-ECC-field-g");
+    std::pair<uint64_t,uint64_t> curveParams = inputSerializer.getNumberPairForKey("#ECC-A-B");
+    return SeriesParameters(prime, pointCoordinates.first, pointCoordinates.second,
+                               curveParams.first, curveParams.second);
 }
 
 

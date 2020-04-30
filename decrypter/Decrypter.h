@@ -2,7 +2,7 @@
 #define DECRYPTER_H_INCLUDED
 
 #include "../common/EllipticCurve.h"
-#include "../encrypter/EncrypterInput.h"
+#include "DecrypterInput.h"
 #include <map>
 
 
@@ -11,10 +11,10 @@ namespace decrypter
 
 void runDecrypter(int argc, char** argv)
 {
-    std::string inputFileName = argc > 1 ? argv[1] : "inputA.in"; // TODO change
-    std::string outputFileName = argc > 2 ? argv[2] : "outputA.out";
+    std::string inputFileName = argc > 1 ? argv[1] : "outputA.out"; // TODO change
+    std::string outputFileName = argc > 2 ? argv[2] : "outputB.out";
 
-    encrypter::EncrypterParameters decrypterParameters = encrypter::readInput(inputFileName);
+    DecrypterParamaters decrypterParameters = readInput(inputFileName);
 
     // TODO primetest on encrypterParameters.prime
     // TODO check that g is on the curve
@@ -24,14 +24,12 @@ void runDecrypter(int argc, char** argv)
 
     EllipticCurve curve = decrypterParameters.curve;
     EllipticCurvePoint base = decrypterParameters.g;
-    EllipticCurvePoint key = curve.multiply(base,decrypterParameters.a);
+    EllipticCurvePoint key = decrypterParameters.key;
 
     EllipticCurvePoint runningValue = curve.getIdealPoint();
     auto forwardListIterator = forwardList.end();
     auto backwardListIterator = backwardList.end();
 
-    //EllipticCurvePoint temp = curve.add(base, base);
-    //temp = curve.add(base, temp);
 
     uint64_t m = 1;
     for (; m<decrypterParameters.prime*decrypterParameters.prime; ++m)

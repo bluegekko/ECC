@@ -24,10 +24,10 @@ void runEncrypter(int argc, char** argv)
     EllipticCurvePoint output = curve.multiply(input,encrypterParameters.a);
     std::cout << output.first.getValue() << " " << output.second.getValue() << std::endl;
     std::ofstream outStream(outputFileName);
-    outStream << "#prime: " <<  encrypterParameters.prime << std::endl;
-    outStream << "#point-in-ECC-field-g: " << encrypterParameters.g.first.getValue() << " " << encrypterParameters.g.second.getValue() << std::endl;
-    outStream << "#point-in-ECC-field-g*a: " << output.first.getValue() << " " << output.second.getValue() << std::endl;
-    outStream << "#ECC-A-B: " << curve.getA().getValue() << " " << curve.getB().getValue();
+    outStream << "#prime " <<  encrypterParameters.prime << std::endl;
+    outStream << "#point-in-ECC-field-g " << encrypterParameters.g.first.getValue() << " " << encrypterParameters.g.second.getValue() << std::endl;
+    outStream << "#point-in-ECC-field-key " << output.first.getValue() << " " << output.second.getValue() << std::endl;
+    outStream << "#ECC-A-B " << curve.getA().getValue() << " " << curve.getB().getValue();
 }
 
 

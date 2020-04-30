@@ -1,5 +1,7 @@
 #include <iostream>
 
+// The corresponding macros should be given as build parameters for each module to be run.
+
 #ifdef build_encrypter
 #include "encrypter/Encrypter.h"
 #endif // build_encrypter
@@ -16,10 +18,10 @@ int main(int argc, char** argv)
 {
 
     #ifdef build_encrypter
-    //encrypter::runEncrypter(argc, argv);
+    encrypter::runEncrypter(argc, argv);
     #endif // build_encrypter
     #ifdef build_series
-    //series::runSeriesGenerator(argc, argv);
+    series::runSeriesGenerator(argc, argv);
     #endif //build_series
     #ifdef build_decrypter
     decrypter::runDecrypter(argc, argv);
