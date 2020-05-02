@@ -40,10 +40,8 @@ std::vector<int> SeriesGenerator::generateSimple()
     return returnSeries;
 }
 
-void runSeriesGenerator(int argc, char** argv)
+void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
 {
-    std::string inputFileName = argc > 1 ? argv[1] : "inputForSeries.in";
-    std::string outputFileName = argc > 2 ? argv[2] : "outputSeriesGenerator.out";
     SeriesParameters params = readInput(inputFileName);
     SeriesGenerator seriesGenerator(params.prime, params.generator, params.curve);
     auto series = seriesGenerator.generateSimple();
@@ -56,6 +54,6 @@ void runSeriesGenerator(int argc, char** argv)
     std::cout << std::endl;
 }
 
-}
+} // namespace series
 
 #endif // SERIESGENERATOR_H_INCLUDED

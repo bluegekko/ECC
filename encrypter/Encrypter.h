@@ -9,11 +9,8 @@ namespace encrypter
 {
 
 
-void runEncrypter(int argc, char** argv)
+void runEncrypter(std::string inputFileName, std::string outputFileName)
 {
-    std::string inputFileName = argc > 1 ? argv[1] : "inputA.in";
-    std::string outputFileName = argc > 2 ? argv[2] : "outputA.out";
-
     EncrypterParameters encrypterParameters = readInput(inputFileName);
 
     // TODO primetest on encrypterParameters.prime

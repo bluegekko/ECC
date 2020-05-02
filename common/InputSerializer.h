@@ -61,6 +61,10 @@ public:
         std::istringstream(inputMap[key][index]) >> returnValue;
         return returnValue;
     }
+    std::string getStringForKey(std::string key, size_t index = 0)
+    {
+        return inputMap[key][index];
+    }
     std::pair<uint64_t, uint64_t> getNumberPairForKey(std::string key)
     {
         return std::pair<uint64_t, uint64_t>(getNumberForKey(key, 0), getNumberForKey(key, 1));

@@ -16,15 +16,16 @@
 
 int main(int argc, char** argv)
 {
-
+    InputSerializer mainConfig("ecc.conf");
+    mainConfig.initializeMap();
     #ifdef build_encrypter
-    encrypter::runEncrypter(argc, argv);
+    encrypter::runEncrypter(mainConfig.getStringForKey("#encrypter-input"), mainConfig.getStringForKey("#encrypter-output"));
     #endif // build_encrypter
     #ifdef build_series
-    series::runSeriesGenerator(argc, argv);
+    series::runSeriesGenerator(mainConfig.getStringForKey("#series-input"), mainConfig.getStringForKey("#series-output"));
     #endif //build_series
     #ifdef build_decrypter
-    decrypter::runDecrypter(argc, argv);
+    decrypter::runDecrypter(mainConfig.getStringForKey("#decrypter-input"), mainConfig.getStringForKey("#decrypter-output"));
     #endif // build_decrypter
     return 0;
 }
