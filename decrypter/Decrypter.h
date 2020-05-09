@@ -13,8 +13,11 @@ void runDecrypter(std::string inputFileName, std::string outputFileName)
 {
     DecrypterParamaters decrypterParameters = readInput(inputFileName);
 
+    if (!decrypterParameters.validate())
+    {
+        return;
+    }
     // TODO primetest on parameters prime
-    // TODO check that g is on the curve, and a is on curve
 
     std::map<EllipticCurvePoint, uint64_t> forwardList;
     std::map<EllipticCurvePoint, uint64_t> backwardList;

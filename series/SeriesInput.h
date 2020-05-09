@@ -13,10 +13,11 @@ struct SeriesParameters
     SeriesParameters(uint64_t prime, uint64_t pointX, uint64_t pointY, uint64_t curveA, uint64_t curveB) :
         prime(prime), primeFieldValueFactory(std::make_shared<PrimeFieldValueFactory>(prime)), generator(primeFieldValueFactory->newValue(pointX), primeFieldValueFactory->newValue(pointY)), curve(primeFieldValueFactory->newValue(curveA), primeFieldValueFactory->newValue(curveB), primeFieldValueFactory) {}
 
-    uint64_t prime;;
+    uint64_t prime;
     std::shared_ptr<PrimeFieldValueFactory> primeFieldValueFactory;
     EllipticCurvePoint generator;
     EllipticCurve curve;
+    bool validate() const;
 };
 
 SeriesParameters readInput(const std::string& fileName)
@@ -30,6 +31,16 @@ SeriesParameters readInput(const std::string& fileName)
                                curveParams.first, curveParams.second);
 }
 
+bool SeriesParameters::validate() const
+{
+    if (!curve.isOnCurve(generator))
+    {
+        std::cout << "g is not on curve!" << std::endl;
+        return false;
+    }
+
+    return true;
+}
 
 }
 

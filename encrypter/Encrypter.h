@@ -13,8 +13,12 @@ void runEncrypter(std::string inputFileName, std::string outputFileName)
 {
     EncrypterParameters encrypterParameters = readInput(inputFileName);
 
+    if (!encrypterParameters.validate())
+    {
+        return;
+    }
+
     // TODO primetest on encrypterParameters.prime
-    // TODO check that g is on the curve
 
     EllipticCurve curve = encrypterParameters.curve;
     EllipticCurvePoint input = encrypterParameters.g;

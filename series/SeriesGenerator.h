@@ -7,7 +7,7 @@
 namespace series
 {
 
-const size_t SERIES_SIZE = 100;
+const size_t SERIES_SIZE = 20;
 
 class SeriesGenerator
 {

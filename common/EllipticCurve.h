@@ -27,6 +27,7 @@ public:
     EllipticCurvePoint getIdealPoint() const {return idealPoint;}
     EllipticCurvePoint doublePoint(const EllipticCurvePoint& point) const;
     EllipticCurvePoint inverse(const EllipticCurvePoint& point) const;
+    bool isOnCurve(const EllipticCurvePoint& point) const;
     EllipticCurvePoint add(const EllipticCurvePoint& pointFirst, const EllipticCurvePoint& pointSecond) const;
     EllipticCurvePoint subtract(const EllipticCurvePoint& pointFirst, const EllipticCurvePoint& pointSecond) const;
     EllipticCurvePoint multiply(const EllipticCurvePoint& point, uint64_t m) const;
@@ -58,6 +59,11 @@ EllipticCurvePoint EllipticCurve::inverse(const EllipticCurvePoint& point) const
     EllipticCurvePoint returnValue = point;
     returnValue.second = zero - returnValue.second;
     return returnValue;
+}
+
+bool EllipticCurve::isOnCurve(const EllipticCurvePoint& point) const
+{
+    return point.second*point.second == point.first*point.first*point.first + A*point.first + B;
 }
 
 EllipticCurvePoint EllipticCurve::add(const EllipticCurvePoint& pointP, const EllipticCurvePoint& pointQ) const

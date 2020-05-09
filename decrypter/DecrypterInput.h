@@ -20,6 +20,7 @@ struct DecrypterParamaters
     EllipticCurvePoint g;
     EllipticCurvePoint key;
     EllipticCurve curve;
+    bool validate() const;
 };
 
 DecrypterParamaters readInput(const std::string fileName)
@@ -33,6 +34,22 @@ DecrypterParamaters readInput(const std::string fileName)
     return DecrypterParamaters(prime, pointCoordinates.first, pointCoordinates.second, keyPoint.first, keyPoint.second,
                                 curveParams.first, curveParams.second);
 
+}
+
+bool DecrypterParamaters::validate() const
+{
+    if (!curve.isOnCurve(g))
+    {
+        std::cout << "g is not on curve!" << std::endl;
+        return false;
+    }
+    if (!curve.isOnCurve(key))
+    {
+        std::cout << "key is not on curve!" << std::endl;
+        return false;
+    }
+
+    return true;
 }
 
 } // decrypter

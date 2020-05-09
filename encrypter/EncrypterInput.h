@@ -18,6 +18,7 @@ struct EncrypterParameters
     EllipticCurvePoint g;
     uint64_t a;
     EllipticCurve curve;
+    bool validate() const;
 };
 
 EncrypterParameters readInput(const std::string fileName)
@@ -30,8 +31,19 @@ EncrypterParameters readInput(const std::string fileName)
     std::pair<uint64_t,uint64_t> curveParams = inputSerializer.getNumberPairForKey("#ECC-A-B");
     return EncrypterParameters(prime, pointCoordinates.first, pointCoordinates.second, multiplicant,
                                curveParams.first, curveParams.second);
-
 }
+
+bool EncrypterParameters::validate() const
+{
+    if (!curve.isOnCurve(g))
+    {
+        std::cout << "g is not on curve!" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 
 } // namespace encypter
 
