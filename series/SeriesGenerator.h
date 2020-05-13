@@ -3,6 +3,7 @@
 
 #include "../common/EllipticCurve.h"
 #include "SeriesInput.h"
+#include "CalculateLegendre.h"
 
 namespace series
 {
@@ -15,6 +16,7 @@ public:
     SeriesGenerator(uint64_t prime, const EllipticCurvePoint& generator,const EllipticCurve& curve) :
         prime(prime), generator(generator), curve(curve) {}
     std::vector<int> generateSimple();
+    std::vector<int> generateLegendre();
 private:
     uint64_t prime;
     EllipticCurvePoint generator;
@@ -40,11 +42,33 @@ std::vector<int> SeriesGenerator::generateSimple()
     return returnSeries;
 }
 
+std::vector<int> SeriesGenerator::generateLegendre()
+{
+    std::vector<int> returnSeries;
+    returnSeries.resize(SERIES_SIZE);
+    EllipticCurvePoint currentPoint = curve.multiply(generator, 0);
+    for(size_t counter = 1; counter<= SERIES_SIZE; ++counter)
+    {
+        currentPoint = curve.add(currentPoint, generator);
+        uint64_t r = generalizingFunction(currentPoint).getValue();
+        returnSeries[counter-1] = (calculateLegendre(prime, r) == 1) ? 1 : -1;
+    }
+    return returnSeries;
+}
+
 void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
 {
     SeriesParameters params = readInput(inputFileName);
     SeriesGenerator seriesGenerator(params.prime, params.generator, params.curve);
-    auto series = seriesGenerator.generateSimple();
+    std::vector<int> series;
+    if (params.construction == Construction::SIMPLE)
+    {
+        series = seriesGenerator.generateSimple();
+    }
+    else if (params.construction == Construction::LEGENDRE)
+    {
+        series = seriesGenerator.generateLegendre();
+    }
     std::ofstream outStream(outputFileName);
     for (auto it = series.begin(); it != series.end(); ++it)
     {

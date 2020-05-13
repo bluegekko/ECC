@@ -30,7 +30,6 @@ void runDecrypter(std::string inputFileName, std::string outputFileName)
     auto forwardListIterator = forwardList.end();
     auto backwardListIterator = backwardList.end();
 
-
     uint64_t m = 1;
     for (; m<decrypterParameters.prime*decrypterParameters.prime; ++m)
     {

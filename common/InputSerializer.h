@@ -57,7 +57,7 @@ public:
     }
     uint64_t getNumberForKey(std::string key, size_t index = 0)
     {
-        uint64_t returnValue;
+        uint64_t returnValue = 0;
         std::istringstream(inputMap[key][index]) >> returnValue;
         return returnValue;
     }
