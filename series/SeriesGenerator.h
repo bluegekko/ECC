@@ -13,20 +13,16 @@ const size_t SERIES_SIZE = 20;
 class SeriesGenerator
 {
 public:
-    SeriesGenerator(uint64_t prime, const EllipticCurvePoint& generator,const EllipticCurve& curve) :
-        prime(prime), generator(generator), curve(curve) {}
+    SeriesGenerator(uint64_t prime, const EllipticCurvePoint& generator, const EllipticCurve& curve, const TwoVariablePolynom& polynom) :
+        prime(prime), generator(generator), curve(curve), polynom(polynom) {}
     std::vector<int> generateSimple();
     std::vector<int> generateLegendre();
 private:
     uint64_t prime;
     EllipticCurvePoint generator;
     EllipticCurve curve;
+    TwoVariablePolynom polynom;
 };
-
-PrimeFieldValue generalizingFunction(EllipticCurvePoint point)
-{
-    return point.first;
-}
 
 std::vector<int> SeriesGenerator::generateSimple()
 {
@@ -36,7 +32,7 @@ std::vector<int> SeriesGenerator::generateSimple()
     for(size_t counter = 1; counter<= SERIES_SIZE; ++counter)
     {
         currentPoint = curve.add(currentPoint, generator);
-        uint64_t r = generalizingFunction(currentPoint).getValue();
+        uint64_t r = polynom.calculate(currentPoint.first, currentPoint.second).getValue();
         returnSeries[counter-1] = (r > (prime - 1)/2) ? -1 : 1;
     }
     return returnSeries;
@@ -50,7 +46,7 @@ std::vector<int> SeriesGenerator::generateLegendre()
     for(size_t counter = 1; counter<= SERIES_SIZE; ++counter)
     {
         currentPoint = curve.add(currentPoint, generator);
-        uint64_t r = generalizingFunction(currentPoint).getValue();
+        uint64_t r = polynom.calculate(currentPoint.first, currentPoint.second).getValue();
         returnSeries[counter-1] = (calculateLegendre(prime, r) == 1) ? 1 : -1;
     }
     return returnSeries;
@@ -59,7 +55,8 @@ std::vector<int> SeriesGenerator::generateLegendre()
 void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
 {
     SeriesParameters params = readInput(inputFileName);
-    SeriesGenerator seriesGenerator(params.prime, params.generator, params.curve);
+    params.validate();
+    SeriesGenerator seriesGenerator(params.prime, params.generator, params.curve, params.polynom);
     std::vector<int> series;
     if (params.construction == Construction::SIMPLE)
     {

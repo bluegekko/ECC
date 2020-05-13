@@ -4,6 +4,7 @@
 #include "../common/EllipticCurve.h"
 #include "../common/PrimeField.h"
 #include "../common/InputSerializer.h"
+#include "Polynom.h"
 
 namespace series
 {
@@ -17,11 +18,13 @@ enum class Construction
 
 struct SeriesParameters
 {
-    SeriesParameters(uint64_t prime, uint64_t pointX, uint64_t pointY, uint64_t curveA, uint64_t curveB, Construction construction) :
-        prime(prime), primeFieldValueFactory(std::make_shared<PrimeFieldValueFactory>(prime)),
+    SeriesParameters(uint64_t prime, std::shared_ptr<PrimeFieldValueFactory> primeFieldValueFactory,
+                     uint64_t pointX, uint64_t pointY, uint64_t curveA, uint64_t curveB,
+                     Construction construction, TwoVariablePolynom polynom) :
+        prime(prime), primeFieldValueFactory(primeFieldValueFactory),
          generator(primeFieldValueFactory->newValue(pointX), primeFieldValueFactory->newValue(pointY)),
          curve(primeFieldValueFactory->newValue(curveA), primeFieldValueFactory->newValue(curveB), primeFieldValueFactory),
-         construction(construction) {}
+         construction(construction), polynom(polynom) {}
 
 
     uint64_t prime;
@@ -30,6 +33,7 @@ struct SeriesParameters
     EllipticCurve curve;
     bool validate() const;
     Construction construction;
+    TwoVariablePolynom polynom;
 };
 
 Construction getConstructionFromString(std::string value)
@@ -50,11 +54,23 @@ SeriesParameters readInput(const std::string& fileName)
     InputSerializer inputSerializer(fileName);
     inputSerializer.initializeMap();
     uint64_t prime = inputSerializer.getNumberForKey("#prime");
+    std::shared_ptr<PrimeFieldValueFactory> primeFieldValueFactory = std::make_shared<PrimeFieldValueFactory>(prime);
     std::pair<uint64_t,uint64_t> pointCoordinates = inputSerializer.getNumberPairForKey("#point-in-ECC-field-g");
     std::pair<uint64_t,uint64_t> curveParams = inputSerializer.getNumberPairForKey("#ECC-A-B");
     Construction construction = getConstructionFromString(inputSerializer.getStringForKey("#construction"));
-    return SeriesParameters(prime, pointCoordinates.first, pointCoordinates.second,
-                               curveParams.first, curveParams.second, construction);
+    std::vector<std::string> monoms = inputSerializer.getStringVectorForKey("#polynom");
+    TwoVariablePolynom polynom;
+    for(auto monom : monoms)
+    {
+        if (!validateMonomString(monom))
+        {
+            std::cout << "monom is not valid in #polynom parameter: " << monom << "!" << std::endl;
+        }
+        polynom.add(TwoVariableMonom(primeFieldValueFactory, monom));
+    }
+
+    return SeriesParameters(prime, primeFieldValueFactory, pointCoordinates.first, pointCoordinates.second,
+                               curveParams.first, curveParams.second, construction, polynom);
 }
 
 bool SeriesParameters::validate() const

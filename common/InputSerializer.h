@@ -8,6 +8,13 @@
 
 const char SPECIAL_CHAR = '#';
 
+uint64_t convertStringToInt(std::string value)
+{
+    uint64_t returnValue = 0;
+    std::istringstream(value) >> returnValue;
+    return returnValue;
+}
+
 class InputSerializer
 {
 public:
@@ -32,7 +39,7 @@ public:
             {
                 currentKey = temp;
             }
-            else
+            else if (temp != "")
             {
                 inputMap[currentKey].push_back(temp);
             }
@@ -65,6 +72,10 @@ public:
     {
         return inputMap[key][index];
     }
+    std::vector<std::string> getStringVectorForKey(std::string key)
+    {
+        return inputMap[key];
+    }
     std::pair<uint64_t, uint64_t> getNumberPairForKey(std::string key)
     {
         return std::pair<uint64_t, uint64_t>(getNumberForKey(key, 0), getNumberForKey(key, 1));
@@ -75,5 +86,6 @@ private:
     std::map<std::string, std::vector<std::string>> inputMap;
     uint64_t index;
 };
+
 
 #endif // INPUTSERIALIZER_H_INCLUDED
