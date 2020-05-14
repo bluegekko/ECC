@@ -4,6 +4,9 @@
 #include <regex>
 #include "../common/PrimeField.h"
 
+namespace series
+{
+
 bool validateMonomString(std::string input)
 {
     std::regex regexp("[0-9]+x[0-9]+y[0-9]");
@@ -59,5 +62,7 @@ public:
 private:
     std::vector<TwoVariableMonom> monoms;
 };
+
+} // namespace series
 
 #endif // POLYNOM_H_INCLUDED

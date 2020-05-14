@@ -3,6 +3,9 @@
 
 #include <vector>
 
+namespace series
+{
+
 class MultiIndex
 {
 public:
@@ -10,7 +13,7 @@ public:
     {
         indices.resize(indexSize);
         size_t value = 0;
-        for (size_t index : indices)
+        for (size_t& index : indices)
         {
             index = value++;
         }
@@ -26,7 +29,7 @@ public:
         while(backwardIndex <= indexSize)
         {
             indices[indexSize - backwardIndex]++;
-            if (indices[indexSize - backwardIndex] > limit - backwardIndex)
+            if (indices[indexSize - backwardIndex] + backwardIndex  > limit )
             {
                 backwardIndex++;
             }
@@ -57,11 +60,14 @@ private:
 int calculateMultiplicationAtIndex(std::vector<int>& series, MultiIndex& multiIndex, size_t startIndex)
 {
     int value = 1;
-    for(size_t index : multiIndex.getIndices())
+    for(size_t& index : multiIndex.getIndices())
     {
         value*=series[startIndex + index - 1];
     }
     return value;
+}
+
+
 }
 
 #endif // MULTIINDEX_H_INCLUDED

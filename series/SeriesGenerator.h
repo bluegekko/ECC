@@ -14,8 +14,9 @@ const size_t SERIES_SIZE = 20;
 class SeriesGenerator
 {
 public:
-    SeriesGenerator(uint64_t prime, const EllipticCurvePoint& generator, const EllipticCurve& curve, const TwoVariablePolynom& polynom) :
-        prime(prime), generator(generator), curve(curve), polynom(polynom) {}
+    SeriesGenerator(uint64_t prime, const EllipticCurvePoint& generator, const EllipticCurve& curve,
+                     const TwoVariablePolynom& polynom, uint64_t seriesSize) :
+        prime(prime), generator(generator), curve(curve), polynom(polynom), seriesSize(seriesSize){}
     std::vector<int> generateSimple();
     std::vector<int> generateLegendre();
     uint64_t calculateWellDistribution(std::vector<int>& series);
@@ -25,14 +26,15 @@ private:
     EllipticCurvePoint generator;
     EllipticCurve curve;
     TwoVariablePolynom polynom;
+    uint64_t seriesSize;
 };
 
 std::vector<int> SeriesGenerator::generateSimple()
 {
     std::vector<int> returnSeries;
-    returnSeries.resize(SERIES_SIZE);
+    returnSeries.resize(seriesSize);
     EllipticCurvePoint currentPoint = curve.multiply(generator, 0);
-    for(size_t counter = 1; counter<= SERIES_SIZE; ++counter)
+    for(size_t counter = 1; counter<= seriesSize; ++counter)
     {
         currentPoint = curve.add(currentPoint, generator);
         uint64_t r = polynom.calculate(currentPoint.first, currentPoint.second).getValue();
@@ -44,9 +46,9 @@ std::vector<int> SeriesGenerator::generateSimple()
 std::vector<int> SeriesGenerator::generateLegendre()
 {
     std::vector<int> returnSeries;
-    returnSeries.resize(SERIES_SIZE);
+    returnSeries.resize(seriesSize);
     EllipticCurvePoint currentPoint = curve.multiply(generator, 0);
-    for(size_t counter = 1; counter<= SERIES_SIZE; ++counter)
+    for(size_t counter = 1; counter<= seriesSize; ++counter)
     {
         currentPoint = curve.add(currentPoint, generator);
         uint64_t r = polynom.calculate(currentPoint.first, currentPoint.second).getValue();
@@ -85,7 +87,7 @@ uint64_t SeriesGenerator::calculateAutoCorrelation(std::vector<int>& series, uin
 {
     size_t N = series.size();
     uint64_t autoCorrelelation = 0;
-    for(size_t M=1; M<=N-l; ++M)
+    for(size_t M=1; M<=N-l+1; ++M)
     {
         MultiIndex multiIndex(N-M,l);
         size_t counter = 0;
@@ -115,7 +117,7 @@ void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
 {
     SeriesParameters params = readInput(inputFileName);
     params.validate();
-    SeriesGenerator seriesGenerator(params.prime, params.generator, params.curve, params.polynom);
+    SeriesGenerator seriesGenerator(params.prime, params.generator, params.curve, params.polynom, params.seriesSize);
     std::vector<int> series;
     if (params.construction == Construction::SIMPLE)
     {
