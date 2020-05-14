@@ -48,9 +48,9 @@ void runDecrypter(std::string inputFileName, std::string outputFileName)
     uint64_t a = forwardListIterator != forwardList.end() ? m + forwardListIterator->second : m + backwardListIterator->second;
 
 
-    std::cout << a << std::endl;
-    std::cout << (key.first.getValue()) << " " << (key.second.getValue()) << std::endl;
-    std::cout << curve.multiply(base, a).first.getValue() << " " << curve.multiply(base,a).second.getValue() << std::endl;
+    //std::cout << a << std::endl;
+    //std::cout << (key.first.getValue()) << " " << (key.second.getValue()) << std::endl;
+    //std::cout << curve.multiply(base, a).first.getValue() << " " << curve.multiply(base,a).second.getValue() << std::endl;
     std::ofstream outStream(outputFileName);
     outStream << "#a " << a << std::endl;
 }

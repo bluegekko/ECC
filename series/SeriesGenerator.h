@@ -131,20 +131,20 @@ void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
     outStream << "#series ";
     for (auto it = series.begin(); it != series.end(); ++it)
     {
-        std::cout << *it << " ";
+        //std::cout << *it << " ";
         outStream << *it << " ";
     }
-    std::cout << std::endl;
+   // std::cout << std::endl;
     outStream << std::endl;
-    std::cout << seriesGenerator.calculateWellDistribution(series) << std::endl;
+    //std::cout << seriesGenerator.calculateWellDistribution(series) << std::endl;
     outStream << "#well-distribution " << seriesGenerator.calculateWellDistribution(series) << std::endl;
     outStream << "#autocorrelation ";
     for (uint64_t l = 2; l <= params.acLimit; ++l)
     {
-        std::cout << seriesGenerator.calculateAutoCorrelation(series, l) << " ";
+        //std::cout << seriesGenerator.calculateAutoCorrelation(series, l) << " ";
         outStream << seriesGenerator.calculateAutoCorrelation(series, l) << " ";
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
     outStream << std::endl;
 }
 
