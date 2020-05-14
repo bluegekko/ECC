@@ -17,6 +17,8 @@ public:
         prime(prime), generator(generator), curve(curve), polynom(polynom) {}
     std::vector<int> generateSimple();
     std::vector<int> generateLegendre();
+    uint64_t calculateWellDistribution(std::vector<int>& series);
+    uint64_t calculateAutoCorrelation(std::vector<int>& series, uint64_t l);
 private:
     uint64_t prime;
     EllipticCurvePoint generator;
@@ -52,6 +54,33 @@ std::vector<int> SeriesGenerator::generateLegendre()
     return returnSeries;
 }
 
+uint64_t SeriesGenerator::calculateWellDistribution(std::vector<int>& series)
+{
+    size_t N = series.size();
+    uint64_t well_distribution = 0;
+    for (size_t a = 1; a<=N; ++a)
+    {
+        for (size_t b = 1; b<=N-a; ++b)
+        {
+            for (size_t t = 1; (a + (t-1)*b)<=N; ++t)
+            {
+                int sum = 0;
+                for (size_t j = 0; j<=(t-1); ++j)
+                {
+                    sum+= series[(a+j*b)-1];
+                }
+                sum = sum>0 ? sum : - sum;
+                if (well_distribution < sum)
+                {
+                    well_distribution = sum;
+                }
+            }
+        }
+    }
+    return well_distribution;
+}
+
+
 void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
 {
     SeriesParameters params = readInput(inputFileName);
@@ -67,12 +96,16 @@ void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
         series = seriesGenerator.generateLegendre();
     }
     std::ofstream outStream(outputFileName);
+    outStream << "#series "
     for (auto it = series.begin(); it != series.end(); ++it)
     {
         std::cout << *it << " ";
         outStream << *it << " ";
     }
     std::cout << std::endl;
+    outStream << std::endl;
+    std::cout << seriesGenerator.calculateWellDistribution(series) << std::endl;
+    outStream << "#well-distribution " seriesGenerator.calculateWellDistribution(series) << std::endl;
 }
 
 } // namespace series
