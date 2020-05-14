@@ -4,6 +4,7 @@
 #include "../common/EllipticCurve.h"
 #include "SeriesInput.h"
 #include "CalculateLegendre.h"
+#include "MultiIndex.h"
 
 namespace series
 {
@@ -80,6 +81,35 @@ uint64_t SeriesGenerator::calculateWellDistribution(std::vector<int>& series)
     return well_distribution;
 }
 
+uint64_t SeriesGenerator::calculateAutoCorrelation(std::vector<int>& series, uint64_t l)
+{
+    size_t N = series.size();
+    uint64_t autoCorrelelation = 0;
+    for(size_t M=1; M<=N-l; ++M)
+    {
+        MultiIndex multiIndex(N-M,l);
+        size_t counter = 0;
+
+        while(multiIndex.isValid())
+        {
+            int sum = 0;
+            for (size_t n=1; n<=M; ++n)
+            {
+                sum+= calculateMultiplicationAtIndex(series, multiIndex, n);
+            }
+            sum = sum>0 ? sum : - sum;
+            if (autoCorrelelation < sum)
+            {
+                autoCorrelelation = sum;
+            }
+            multiIndex.increment();
+            counter++;
+        }
+
+    }
+    return autoCorrelelation;
+}
+
 
 void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
 {
@@ -96,7 +126,7 @@ void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
         series = seriesGenerator.generateLegendre();
     }
     std::ofstream outStream(outputFileName);
-    outStream << "#series "
+    outStream << "#series ";
     for (auto it = series.begin(); it != series.end(); ++it)
     {
         std::cout << *it << " ";
@@ -105,7 +135,15 @@ void runSeriesGenerator(std::string inputFileName, std::string outputFileName)
     std::cout << std::endl;
     outStream << std::endl;
     std::cout << seriesGenerator.calculateWellDistribution(series) << std::endl;
-    outStream << "#well-distribution " seriesGenerator.calculateWellDistribution(series) << std::endl;
+    outStream << "#well-distribution " << seriesGenerator.calculateWellDistribution(series) << std::endl;
+    outStream << "#autocorrelation ";
+    for (uint64_t l = 2; l <= params.acLimit; ++l)
+    {
+        std::cout << seriesGenerator.calculateAutoCorrelation(series, l) << " ";
+        outStream << seriesGenerator.calculateAutoCorrelation(series, l) << " ";
+    }
+    std::cout << std::endl;
+    outStream << std::endl;
 }
 
 } // namespace series

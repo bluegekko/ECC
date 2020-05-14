@@ -20,11 +20,11 @@ struct SeriesParameters
 {
     SeriesParameters(uint64_t prime, std::shared_ptr<PrimeFieldValueFactory> primeFieldValueFactory,
                      uint64_t pointX, uint64_t pointY, uint64_t curveA, uint64_t curveB,
-                     Construction construction, TwoVariablePolynom polynom) :
+                     Construction construction, TwoVariablePolynom polynom, uint64_t acLimit) :
         prime(prime), primeFieldValueFactory(primeFieldValueFactory),
          generator(primeFieldValueFactory->newValue(pointX), primeFieldValueFactory->newValue(pointY)),
          curve(primeFieldValueFactory->newValue(curveA), primeFieldValueFactory->newValue(curveB), primeFieldValueFactory),
-         construction(construction), polynom(polynom) {}
+         construction(construction), polynom(polynom), acLimit(acLimit){}
 
 
     uint64_t prime;
@@ -34,6 +34,7 @@ struct SeriesParameters
     bool validate() const;
     Construction construction;
     TwoVariablePolynom polynom;
+    uint64_t acLimit;
 };
 
 Construction getConstructionFromString(std::string value)
@@ -68,9 +69,9 @@ SeriesParameters readInput(const std::string& fileName)
         }
         polynom.add(TwoVariableMonom(primeFieldValueFactory, monom));
     }
-
+    uint64_t autoCorrelationLimit = inputSerializer.getNumberForKey("#autocorrelation-limit");
     return SeriesParameters(prime, primeFieldValueFactory, pointCoordinates.first, pointCoordinates.second,
-                               curveParams.first, curveParams.second, construction, polynom);
+                               curveParams.first, curveParams.second, construction, polynom, autoCorrelationLimit);
 }
 
 bool SeriesParameters::validate() const
