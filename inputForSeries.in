@@ -1,7 +1,7 @@
 #prime 17
 #point-in-ECC-field-g  1 13
 #ECC-A-B 3 12
-#construction legendre
+#construction simple
 #polynom 1x1y0
-#autocorrelation-limit 10
+#autocorrelation-limit 2
 #size 20

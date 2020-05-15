@@ -59,6 +59,7 @@ public:
         }
         // TODO exception?
     }
+    bool isEmpty() const {return monoms.size() == 0;}
 private:
     std::vector<TwoVariableMonom> monoms;
 };

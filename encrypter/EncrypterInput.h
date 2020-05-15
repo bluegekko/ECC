@@ -37,7 +37,7 @@ bool EncrypterParameters::validate() const
 {
     if (!curve.isOnCurve(g))
     {
-        std::cout << "g is not on curve!" << std::endl;
+        std::cout << "g is not on the curve!" << std::endl;
         return false;
     }
 

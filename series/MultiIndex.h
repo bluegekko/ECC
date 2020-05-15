@@ -49,7 +49,8 @@ public:
     {
         return valid;
     }
-    std::vector<size_t> getIndices() {return indices;}
+    ~MultiIndex() = default;
+    std::vector<size_t>& getIndices() {return indices;}
 private:
     std::vector<size_t> indices;
     std::size_t limit;

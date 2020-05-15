@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <map>
+#include <cstdlib>
 
 const char SPECIAL_CHAR = '#';
 
@@ -65,15 +66,30 @@ public:
     uint64_t getNumberForKey(std::string key, size_t index = 0)
     {
         uint64_t returnValue = 0;
+        if (inputMap[key].size() < index + 1)
+        {
+            std::cout << "mandatory parameter missing: " << key << "!" << std::endl;
+            std::exit(-1);
+        }
         std::istringstream(inputMap[key][index]) >> returnValue;
         return returnValue;
     }
     std::string getStringForKey(std::string key, size_t index = 0)
     {
+        if (inputMap[key].size() < index + 1)
+        {
+            std::cout << "mandatory parameter missing: " << key << "!" << std::endl;
+            exit(-1);
+        }
         return inputMap[key][index];
     }
     std::vector<std::string> getStringVectorForKey(std::string key)
     {
+        if (inputMap[key].size() == 0)
+        {
+            std::cout << "mandatory parameter missing: " << key << "!" << std::endl;
+            exit(-1);
+        }
         return inputMap[key];
     }
     std::pair<uint64_t, uint64_t> getNumberPairForKey(std::string key)

@@ -40,12 +40,12 @@ bool DecrypterParamaters::validate() const
 {
     if (!curve.isOnCurve(g))
     {
-        std::cout << "g is not on curve!" << std::endl;
+        std::cout << "g is not on the curve!" << std::endl;
         return false;
     }
     if (!curve.isOnCurve(key))
     {
-        std::cout << "key is not on curve!" << std::endl;
+        std::cout << "key is not on the curve!" << std::endl;
         return false;
     }
 

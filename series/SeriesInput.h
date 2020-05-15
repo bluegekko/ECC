@@ -67,6 +67,7 @@ SeriesParameters readInput(const std::string& fileName)
         if (!validateMonomString(monom))
         {
             std::cout << "monom is not valid in #polynom parameter: " << monom << "!" << std::endl;
+            continue;
         }
         polynom.add(TwoVariableMonom(primeFieldValueFactory, monom));
     }
@@ -81,13 +82,18 @@ bool SeriesParameters::validate() const
 {
     if (!curve.isOnCurve(generator))
     {
-        std::cout << "g is not on curve!" << std::endl;
+        std::cout << "g is not on the curve!" << std::endl;
         return false;
     }
 
     if (construction == Construction::NONE)
     {
         std::cout << "not supported construction type!" << std::endl;
+        return false;
+    }
+    if (polynom.isEmpty())
+    {
+        std::cout << "polynom cannot be empty!" << std::endl;
         return false;
     }
     return true;
